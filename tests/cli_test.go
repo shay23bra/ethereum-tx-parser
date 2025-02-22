@@ -15,14 +15,20 @@ func TestCLI(t *testing.T) {
 	binaryPath := filepath.Join(tempDir, "ethereum-tx-parser")
 
 	// Build the CLI binary
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "cmd/main.go")
+	buildCmd := exec.Command("go", "build", "-o", binaryPath, "./cmd/main.go")
+	var buildOut bytes.Buffer
+	buildCmd.Stdout = &buildOut
+	buildCmd.Stderr = &buildOut
 	err := buildCmd.Run()
-	assert.NoError(t, err, "Failed to build CLI binary")
+	if err != nil {
+		t.Fatalf("Failed to build CLI binary: %v\nOutput: %s", err, buildOut.String())
+	}
 
 	t.Run("Subscribe - Success", func(t *testing.T) {
 		cmd := exec.Command(binaryPath, "-mode", "cli", "subscribe", "0xTestAddress")
 		var out bytes.Buffer
 		cmd.Stdout = &out
+		cmd.Stderr = &out
 		err := cmd.Run()
 		assert.NoError(t, err, "CLI command should succeed")
 		assert.Contains(t, out.String(), "Subscribed to address", "Output should indicate successful subscription")
@@ -42,6 +48,7 @@ func TestCLI(t *testing.T) {
 		cmd := exec.Command(binaryPath, "-mode", "cli", "block")
 		var out bytes.Buffer
 		cmd.Stdout = &out
+		cmd.Stderr = &out
 		err := cmd.Run()
 		assert.NoError(t, err, "CLI command should succeed")
 		assert.Contains(t, out.String(), "Current block", "Output should contain current block number")
@@ -51,6 +58,7 @@ func TestCLI(t *testing.T) {
 		cmd := exec.Command(binaryPath, "-mode", "cli", "transactions", "0xNonExistentAddress")
 		var out bytes.Buffer
 		cmd.Stdout = &out
+		cmd.Stderr = &out
 		err := cmd.Run()
 		assert.NoError(t, err, "CLI command should succeed")
 		assert.Contains(t, out.String(), "No transactions found", "Output should indicate no transactions")
@@ -60,6 +68,7 @@ func TestCLI(t *testing.T) {
 		cmd := exec.Command(binaryPath, "-mode", "cli", "transactions", "invalid-address")
 		var out bytes.Buffer
 		cmd.Stdout = &out
+		cmd.Stderr = &out
 		err := cmd.Run()
 		assert.NoError(t, err, "CLI command should succeed")
 		assert.Contains(t, out.String(), "No transactions found", "Output should indicate no transactions")

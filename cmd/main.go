@@ -4,6 +4,7 @@ import (
 	"ethereum-tx-parser/cmd/api"
 	"ethereum-tx-parser/cmd/cli"
 	"flag"
+	"os"
 )
 
 func main() {
@@ -14,6 +15,7 @@ func main() {
 
 	switch *mode {
 	case "cli":
+		os.Args = append([]string{os.Args[0]}, flag.Args()...)
 		cli.Execute()
 	case "api":
 		server := api.NewServer(rpcURL)

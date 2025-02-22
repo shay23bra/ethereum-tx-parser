@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"ethereum-tx-parser/internal/models"
 	"ethereum-tx-parser/internal/parser"
 	"net/http"
 )
@@ -54,6 +55,10 @@ func (s *Server) HandleGetTransactions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	transactions := s.parser.GetTransactions(address)
+	if transactions == nil {
+		transactions = []models.Transaction{} // Return an empty array instead of nil
+	}
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(transactions)
 }

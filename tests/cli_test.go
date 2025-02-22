@@ -2,21 +2,25 @@ package tests
 
 import (
 	"bytes"
-	"os"
 	"os/exec"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCLI(t *testing.T) {
+	// Create a temporary directory for the binary
+	tempDir := t.TempDir()
+	binaryPath := filepath.Join(tempDir, "ethereum-tx-parser")
+
 	// Build the CLI binary
-	buildCmd := exec.Command("go", "build", "-o", "ethereum-tx-parser", "cmd/main.go")
+	buildCmd := exec.Command("go", "build", "-o", binaryPath, "cmd/main.go")
 	err := buildCmd.Run()
 	assert.NoError(t, err, "Failed to build CLI binary")
 
 	t.Run("Subscribe - Success", func(t *testing.T) {
-		cmd := exec.Command("./ethereum-tx-parser", "-mode", "cli", "subscribe", "0xTestAddress")
+		cmd := exec.Command(binaryPath, "-mode", "cli", "subscribe", "0xTestAddress")
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		err := cmd.Run()
@@ -25,7 +29,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("Subscribe - Missing Address", func(t *testing.T) {
-		cmd := exec.Command("./ethereum-tx-parser", "-mode", "cli", "subscribe")
+		cmd := exec.Command(binaryPath, "-mode", "cli", "subscribe")
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		cmd.Stderr = &out
@@ -35,7 +39,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("GetCurrentBlock - Success", func(t *testing.T) {
-		cmd := exec.Command("./ethereum-tx-parser", "-mode", "cli", "block")
+		cmd := exec.Command(binaryPath, "-mode", "cli", "block")
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		err := cmd.Run()
@@ -44,7 +48,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("GetTransactions - No Transactions", func(t *testing.T) {
-		cmd := exec.Command("./ethereum-tx-parser", "-mode", "cli", "transactions", "0xNonExistentAddress")
+		cmd := exec.Command(binaryPath, "-mode", "cli", "transactions", "0xNonExistentAddress")
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		err := cmd.Run()
@@ -53,16 +57,11 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("GetTransactions - Invalid Address", func(t *testing.T) {
-		cmd := exec.Command("./ethereum-tx-parser", "-mode", "cli", "transactions", "invalid-address")
+		cmd := exec.Command(binaryPath, "-mode", "cli", "transactions", "invalid-address")
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		err := cmd.Run()
 		assert.NoError(t, err, "CLI command should succeed")
 		assert.Contains(t, out.String(), "No transactions found", "Output should indicate no transactions")
-	})
-
-	// Clean up the binary after tests
-	t.Cleanup(func() {
-		os.Remove("ethereum-tx-parser")
 	})
 }

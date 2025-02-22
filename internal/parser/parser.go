@@ -38,6 +38,9 @@ func (p *EthereumParser) GetCurrentBlock() int {
 }
 
 func (p *EthereumParser) Subscribe(address string) bool {
+	if address == "" {
+		return false
+	}
 	p.storage.Subscribe(address)
 	return true
 }

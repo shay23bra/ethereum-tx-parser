@@ -25,7 +25,3 @@ var transactionsCmd = &cobra.Command{
 		}
 	},
 }
-
-func init() {
-	RootCmd.AddCommand(transactionsCmd)
-}

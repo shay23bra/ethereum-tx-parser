@@ -22,7 +22,3 @@ var subscribeCmd = &cobra.Command{
 		}
 	},
 }
-
-func init() {
-	RootCmd.AddCommand(subscribeCmd)
-}

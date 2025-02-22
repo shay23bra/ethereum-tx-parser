@@ -16,7 +16,3 @@ var blockCmd = &cobra.Command{
 		fmt.Printf("Current block: %d\n", block)
 	},
 }
-
-func init() {
-	RootCmd.AddCommand(blockCmd)
-}

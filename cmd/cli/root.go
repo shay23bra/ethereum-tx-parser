@@ -10,6 +10,12 @@ var RootCmd = &cobra.Command{
 	Long:  `A CLI tool to interact with the Ethereum blockchain and parse transactions for subscribed addresses.`,
 }
 
+func init() {
+	RootCmd.AddCommand(subscribeCmd)
+	RootCmd.AddCommand(blockCmd)
+	RootCmd.AddCommand(transactionsCmd)
+}
+
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
 		panic(err)

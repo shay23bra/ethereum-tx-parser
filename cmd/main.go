@@ -7,18 +7,18 @@ import (
 	"os"
 )
 
+const RpcURL = "https://ethereum-rpc.publicnode.com"
+
 func main() {
 	mode := flag.String("mode", "cli", "Run mode: cli or api")
 	flag.Parse()
-
-	rpcURL := "https://ethereum-rpc.publicnode.com"
 
 	switch *mode {
 	case "cli":
 		os.Args = append([]string{os.Args[0]}, flag.Args()...)
 		cli.Execute()
 	case "api":
-		server := api.NewServer(rpcURL)
+		server := api.NewServer(RpcURL)
 		if err := server.Start(":8080"); err != nil {
 			panic(err)
 		}

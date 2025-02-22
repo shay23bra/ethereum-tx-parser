@@ -2,8 +2,9 @@ package api
 
 import (
 	"encoding/json"
-	"ethereum-tx-parser/internal/models"
 	"ethereum-tx-parser/internal/parser"
+	"ethereum-tx-parser/models"
+	"fmt"
 	"net/http"
 )
 
@@ -30,6 +31,11 @@ func (s *Server) HandleSubscribe(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "address is required", http.StatusBadRequest)
 		return
 	}
+	fmt.Printf("address: %v\n", address)
+	if s.parser.IsSubscribed(address) {
+		http.Error(w, "address is already subscribed", http.StatusBadRequest)
+		return
+	}
 
 	success := s.parser.Subscribe(address)
 	if !success {
@@ -51,6 +57,11 @@ func (s *Server) HandleGetTransactions(w http.ResponseWriter, r *http.Request) {
 	address := r.URL.Query().Get("address")
 	if address == "" {
 		http.Error(w, "address is required", http.StatusBadRequest)
+		return
+	}
+
+	if !s.parser.IsSubscribed(address) {
+		http.Error(w, "address is not subscribed to, please subscribe", http.StatusNotFound)
 		return
 	}
 

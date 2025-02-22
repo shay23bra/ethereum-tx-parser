@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"ethereum-tx-parser/internal/models"
+	"ethereum-tx-parser/models"
 	"sync"
 )
 
@@ -9,12 +9,14 @@ type Storage struct {
 	subscribedAddresses map[string]bool
 	transactions        map[string][]models.Transaction
 	mu                  sync.RWMutex
+	lastBlock           int
 }
 
-func NewStorage() *Storage {
+func NewStorage(block int) *Storage {
 	return &Storage{
 		subscribedAddresses: make(map[string]bool),
 		transactions:        make(map[string][]models.Transaction),
+		lastBlock:           int(block),
 	}
 }
 

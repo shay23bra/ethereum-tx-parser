@@ -5,7 +5,7 @@ A Go-based Ethereum blockchain parser that allows users to subscribe to Ethereum
 - **Subscribe to Ethereum Addresses**: Add addresses to monitor for transactions.
 - **Fetch Current Block Number**: Get the latest block number from the Ethereum blockchain.
 - **Retrieve Transactions**: Get all inbound or outbound transactions for a subscribed address.
-- **CLI and HTTP API**: Interact with the parser via command-line interface or HTTP API.
+- **HTTP API and CLI**: Interact with the parser via HTTP API or command-line interface (CLI Still work in progress).
 
 ## Installation
 1. Clone the repository:
@@ -19,24 +19,6 @@ A Go-based Ethereum blockchain parser that allows users to subscribe to Ethereum
     go build -o ethereum-tx-parser cmd/main.go
 
 ## Usage
-
-### CLI Mode
-
-Run the application in CLI mode to interact with the parser via the command line.
-
-**Subscribe to an Ethereum Address:**
-```bash
-./ethereum-tx-parser -mode cli subscribe 0xYourEthereumAddress
-```
-**Get the Current Block Number:**
-```bash
-./ethereum-tx-parser -mode cli block
-```
-**Get Transactions for a Subscribed Address:**
-```bash
-./ethereum-tx-parser -mode cli transactions 0xYourEthereumAddress
-```
-
 
 ### HTTP API Mode
 Run the application in HTTP API mode to expose the parser functionality via REST endpoints.
@@ -64,6 +46,23 @@ GET /transactions?address=0xYourEthereumAddress
 curl http://localhost:8080/subscribe?address=0xYourEthereumAddress
 curl http://localhost:8080/block
 curl http://localhost:8080/transactions?address=0xYourEthereumAddress
+```
+
+### CLI Mode (Under Development - Work in progress)
+ 
+Run the application in CLI mode to interact with the parser via the command line.
+
+**Subscribe to an Ethereum Address:**
+```bash
+./ethereum-tx-parser -mode cli subscribe 0xYourEthereumAddress
+```
+**Get the Current Block Number:**
+```bash
+./ethereum-tx-parser -mode cli block
+```
+**Get Transactions for a Subscribed Address:**
+```bash
+./ethereum-tx-parser -mode cli transactions 0xYourEthereumAddress
 ```
 
 ## Testing
@@ -114,6 +113,7 @@ ethereum-tx-parser/
 - WebSocket Support: Add WebSocket support for real-time transaction notifications.
 - Dockerization: Create a Docker image for easy deployment.
 - Logger: Integrate a logging system with support for syslog to enhance observability, debugging, and monitoring of the application.
+- CLI: Add the ability to use CLI for all commands. Right now only partial logic.
 
 ## References
 -   [Ethereum JSON-RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/)

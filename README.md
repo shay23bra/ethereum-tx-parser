@@ -113,6 +113,7 @@ ethereum-tx-parser/
 - Authentication: Add API key or JWT-based authentication for the HTTP API.
 - WebSocket Support: Add WebSocket support for real-time transaction notifications.
 - Dockerization: Create a Docker image for easy deployment.
+- Logger: Integrate a logging system with support for syslog to enhance observability, debugging, and monitoring of the application.
 
 ## References
 -   [Ethereum JSON-RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/)

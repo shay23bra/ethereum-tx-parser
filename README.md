@@ -77,7 +77,7 @@ This project uses GitHub Actions to run automated tests on every push to the `ma
 To run the tests locally, use the following command:
 ```bash
 go test ./tests/...
-
+```
 
 ## Project Structure
 ```
